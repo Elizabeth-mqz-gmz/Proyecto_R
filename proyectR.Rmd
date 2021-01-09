@@ -35,12 +35,35 @@ Función por enfermedad:
 
 ```{r}
 # FUNCION QUE REEMPLAZA 2 (FALSE) CON 0 (FALSE)
-coMor <- function(comb){
-  coNo <- rawMxData[[comb]] == 2
-  vec <- replace(rawMxData[[comb]], coNo, 0)
-  return(vec)
+coMor <- function(comorbiditiesList){
+  comorbidities <- matrix(1:length(rawMxData$FECHA_ACTUALIZACION), ncol = 1)
+  comorbidities <- cbind(comorbidities, as.numeric(rawMxData$FECHA_DEF), rawMxData$EDAD)
+  colnames(comorbidities) <- c('INDICE', 'DEFUNCION', 'EDAD')
+  comorbiditiesAux <- sapply(comorbiditiesList, function(comorbidity){
+    return(replace(rawMxData[[comorbidity]], rawMxData[[comorbidity]] == 2, 0))
+    })
+  comorbidities <- cbind(comorbidities, comorbiditiesAux)
+  allDates <- apply(comorbidities[,4:length(comorbidities[1,])], MARGIN = 1, FUN = function(paciente){
+    bools <- paciente <= 1
+    if(all(bools)){
+      return(TRUE)
+    }else{
+      return(FALSE)
+    }
+  })
+  return(comorbidities[allDates,])
 }
 ```
+
+```{r}
+prueba <- coMor(c('OBESIDAD', 'DIABETES', 'NEUMONIA'))
+table(prueba[,4:6])
+```
+
+```{r}
+prueba[,3:5]
+```
+
 
 ```{r}
 rawMxData$OBESIDAD <-  coMor('OBESIDAD')
