@@ -1,0 +1,68 @@
+---
+title: "PROYECTO"
+output: html_notebook
+---
+
+```{r}
+setwd("/Users/joelrodriguez/Documents/R/Rdraft")
+```
+
+Por si quieren actualizar archivos:
+```{r}
+# Datos abiertos de Mexico
+# download.file('http://datosabiertos.salud.gob.mx/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip', 'source/dataMx.zip')
+# unzip('source/dataMx.zip', exdir = 'source/')
+```
+
+Cargar datos:
+```{r}
+rawMxData <- read.csv('source/201118COVID19MEXICO.csv')
+```
+
+Volver columna de datos binaria:
+```{r}
+# Vivos
+rawMxData$FECHA_DEF[rawMxData$FECHA_DEF != '9999-99-99'] <- 0
+# Muertos
+rawMxData$FECHA_DEF[rawMxData$FECHA_DEF == '9999-99-99'] <- 1
+```
+0 -> paciente vivo
+1 -> paciente muerto
+
+# Filtrar datos
+
+Función por enfermedad:
+
+```{r}
+# FUNCION QUE REEMPLAZA 2 (FALSE) CON 0 (FALSE)
+coMor <- function(comb){
+  coNo <- rawMxData[[comb]] == 2
+  vec <- replace(rawMxData[[comb]], coNo, 0)
+  return(vec)
+}
+```
+
+```{r}
+rawMxData$OBESIDAD <-  coMor('OBESIDAD')
+```
+
+```{r}
+coFrame <- data.frame('Muertos' = as.numeric(rawMxData$FECHA_DEF[rawMxData$OBESIDAD != 98]),
+           'Obesos' = rawMxData$OBESIDAD[rawMxData$OBESIDAD != 98],
+           'Edad' = rawMxData$EDAD[rawMxData$OBESIDAD != 98])
+```
+0 -> sin comorbilidad
+1 -> con comorbilidad
+
+# Minimos cuadrados
+
+```{r}
+reLin <- glm(formula = Muertos~Obesos+Edad, coFrame, family = binomial(link = 'logit'))
+summary(reLin)
+```
+
+```{r}
+coFrame
+```
+
+
