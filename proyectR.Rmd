@@ -1,24 +1,20 @@
 ---
-title: "PROYECTO"
+title: "PROYECTO_R"
 output: html_notebook
 ---
-
 ```{r}
-setwd("/Users/joelrodriguez/Documents/R/Rdraft")
+setwd("/Users/carlosmichelmourradiaz/documents/R_Project")
 ```
-
 Por si quieren actualizar archivos:
 ```{r}
 # Datos abiertos de Mexico
 # download.file('http://datosabiertos.salud.gob.mx/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip', 'source/dataMx.zip')
 # unzip('source/dataMx.zip', exdir = 'source/')
 ```
-
 Cargar datos:
 ```{r}
-rawMxData <- read.csv('source/201118COVID19MEXICO.csv')
+rawMxData <- read.csv('source/201126COVID19MEXICO.csv')
 ```
-
 Volver columna de datos binaria:
 ```{r}
 # Vivos
@@ -28,19 +24,17 @@ rawMxData$FECHA_DEF[rawMxData$FECHA_DEF == '9999-99-99'] <- 1
 ```
 0 -> paciente vivo
 1 -> paciente muerto
-
 # Filtrar datos
-
 Función por enfermedad:
 
 ```{r}
 # FUNCION QUE REEMPLAZA 2 (FALSE) CON 0 (FALSE)
 coMor <- function(comorbiditiesList){
-  comorbidities <- matrix(1:length(rawMxData$FECHA_ACTUALIZACION), ncol = 1)
-  comorbidities <- cbind(comorbidities, as.numeric(rawMxData$FECHA_DEF), rawMxData$EDAD)
+  comorbidities <-matrix(1:length(rawMxData$FECHA_ACTUALIZACION), ncol = 1)
+  comorbidities <- cbind(comorbidities,as.numeric(rawMxData$FECHA_DEF), rawMxData$EDAD)
   colnames(comorbidities) <- c('INDICE', 'DEFUNCION', 'EDAD')
   comorbiditiesAux <- sapply(comorbiditiesList, function(comorbidity){
-    return(replace(rawMxData[[comorbidity]], rawMxData[[comorbidity]] == 2, 0))
+    return(replace(rawMxData[[comorbidity]],rawMxData[[comorbidity]] == 2, 0))
     })
   comorbidities <- cbind(comorbidities, comorbiditiesAux)
   allDates <- apply(comorbidities[,4:length(comorbidities[1,])], MARGIN = 1, FUN = function(paciente){
@@ -56,36 +50,112 @@ coMor <- function(comorbiditiesList){
 ```
 
 ```{r}
+#generar la matriz con los datos de las comorbilidades indicadas
 prueba <- coMor(c('OBESIDAD', 'DIABETES', 'NEUMONIA'))
 table(prueba[,4:6])
 ```
 
 ```{r}
-prueba[,3:5]
+prueba
 ```
 
 
 ```{r}
-rawMxData$OBESIDAD <-  coMor('OBESIDAD')
-```
+#convertir la matriz en un dataframe para acceder a las columnas
+#ignorar los datos que son desconocidos como aquellos cuyo valor es 98
 
-```{r}
 coFrame <- data.frame('Muertos' = as.numeric(rawMxData$FECHA_DEF[rawMxData$OBESIDAD != 98]),
            'Obesos' = rawMxData$OBESIDAD[rawMxData$OBESIDAD != 98],
-           'Edad' = rawMxData$EDAD[rawMxData$OBESIDAD != 98])
+           'Edad' = rawMxData$EDAD[rawMxData$OBESIDAD != 98],
+           'Diabetes' = rawMxData$DIABETES[rawMxData$OBESIDAD != 98],
+           'Neumonia' = rawMxData$NEUMONIA[rawMxData$OBESIDAD != 98])
 ```
 0 -> sin comorbilidad
 1 -> con comorbilidad
-
 # Minimos cuadrados
-
 ```{r}
-reLin <- glm(formula = Muertos~Obesos+Edad, coFrame, family = binomial(link = 'logit'))
+#glm -> General Linear Model
+#utilizar la función glm para llevar a cabo una regresión lineal logistica
+reLin <- glm(formula = Muertos~Obesos+Edad+Diabetes+Neumonia, coFrame, family = binomial(link = 'logit'))
 summary(reLin)
 ```
 
+A continuación podemos ver que todas las variable a excepción de la diabetes son significativas por lo que procederemos a interpretar dichos coeficientes
+
+# Prueba de Significancia
+
+H0: El modelo no es significativo (B =B2=B3=...=Bk)
+Ha: El modelo si es significativo
+
+Estadistico de prueba
+
 ```{r}
+#realizamos una comparación de las desviaciones
+with(reLin,null.deviance-deviance)
+```
+
+Valor P del estadistico de Prueba
+
+Valor $\alpha$ = 0.05
+
+```{r}
+print("Valor P")
+with(reLin,pchisq(null.deviance-deviance,df.null-df.residual,lower.tail = FALSE))
+```
+
+### Conclusión 
+Como alpha es mayor al valor P,se rechaza H0 por Ha ya que  podemos deducir que al menos una de las variables de  nuestro modelo pueden explicar los datos.
+
+
+# Interpretación de Coeficientes
+
+Podemos observar que hay una alta relación entre padecer obesidad y morir si se enferma de covid teniendo 67% mas de probabilidad, ademas se observo que los paciente que padecen de Neumonia poseen 2.8% mas de probabilidad.
+
+Anteriormente descartamos Diabetes debido debido a que no se encontro una relación significante que pudieran explicar las muertes.
+
+```{r}
+exp(coefficients(reLin))
+```
+
+# Clasificación de observaciones
+
+```{r}
+install.packages("InformationValue")
+```
+
+
+```{r}
+library("InformationValue")
+```
+
+```{r}
+#añadir columna que indique la probabilidad de muerte del paciente
+coFrame$PREDICT <- reLin$fitted.values
 coFrame
 ```
 
+```{r}
+#punto de corte maximisa la calsificación de las observaciones
+#el punto de corte sera en base a muertos con respecto a probabilidad para que sea mas acertado
+Punto_Corte <- optimalCutoff(coFrame$Muertos,coFrame$PREDICT,optimiseFor = "Both")
+Punto_Corte
+```
+
+```{r}
+#indica que porcentaje de las observaciones se clasifico correctamente
+Obs_correctas <- 1-misClassError(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
+
+#esta matriz indicara como estan clasificadas las observaciones en los cuadrantes
+confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
+
+# 1-1 -> Pacientes que el modelo predijo que moririan y murieron
+# 1-0 -> Pacientes que el modelo predijo que moririan y no murieron
+# 0-1 -> Pacientes que el modelo predijo que no moririan y murieron
+# 0-0 -> Pacientes  que el modelo predijo que no moriria y no murieron
+```
+
+```{r}
+#un 74% de las observaciones es muy buen resultado
+Obs_correctas
+```
 
