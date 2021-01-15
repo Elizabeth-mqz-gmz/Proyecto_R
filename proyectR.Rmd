@@ -8,12 +8,13 @@ setwd("/Users/carlosmichelmourradiaz/documents/R_Project")
 Por si quieren actualizar archivos:
 ```{r}
 # Datos abiertos de Mexico
-# download.file('http://datosabiertos.salud.gob.mx/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip', 'source/dataMx.zip')
-# unzip('source/dataMx.zip', exdir = 'source/')
+#download.file('http://datosabiertos.salud.gob.mx/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip', '../source/dataMx.zip')
+#unzip('../source/dataMx.zip', exdir = '../source/')
 ```
 Cargar datos:
 ```{r}
-rawMxData <- read.csv('source/201126COVID19MEXICO.csv')
+# RUTA PAU ../source/dataMx/210114COVID19MEXICO.csv
+rawMxData <- read.csv('../source/dataMx/210114COVID19MEXICO.csv')
 ```
 Volver columna de datos binaria:
 ```{r}
@@ -51,7 +52,7 @@ coMor <- function(comorbiditiesList){
 
 ```{r}
 #generar la matriz con los datos de las comorbilidades indicadas
-prueba <- coMor(c('OBESIDAD', 'DIABETES', 'NEUMONIA'))
+prueba <- coMor(c('OBESIDAD', 'DIABETES', 'NEUMONIA', 'EPOC', 'RENAL_CRONICA', 'ASMA', 'INMUSUPR', 'TABAQUISMO', 'HIPERTENSION'))
 table(prueba[,4:6])
 ```
 
@@ -68,7 +69,13 @@ coFrame <- data.frame('Muertos' = as.numeric(rawMxData$FECHA_DEF[rawMxData$OBESI
            'Obesos' = rawMxData$OBESIDAD[rawMxData$OBESIDAD != 98],
            'Edad' = rawMxData$EDAD[rawMxData$OBESIDAD != 98],
            'Diabetes' = rawMxData$DIABETES[rawMxData$OBESIDAD != 98],
-           'Neumonia' = rawMxData$NEUMONIA[rawMxData$OBESIDAD != 98])
+           'Neumonia' = rawMxData$NEUMONIA[rawMxData$OBESIDAD != 98], 
+           'Hipertension' = rawMxData$HIPERTENSION[rawMxData$OBESIDAD != 98],
+           'Asma' = rawMxData$ASMA[rawMxData$OBESIDAD != 98],
+           'EPOC' = rawMxData$EPOC[rawMxData$OBESIDAD != 98],
+           'Inmunosupresion' = rawMxData$INMUSUPR[rawMxData$OBESIDAD != 98],
+           'Tabaquismo' = rawMxData$TABAQUISMO[rawMxData$OBESIDAD != 98],
+           'Renal_Cronica' = rawMxData$RENAL_CRONICA[rawMxData$OBESIDAD != 98])
 ```
 0 -> sin comorbilidad
 1 -> con comorbilidad
@@ -76,7 +83,7 @@ coFrame <- data.frame('Muertos' = as.numeric(rawMxData$FECHA_DEF[rawMxData$OBESI
 ```{r}
 #glm -> General Linear Model
 #utilizar la función glm para llevar a cabo una regresión lineal logistica
-reLin <- glm(formula = Muertos~Obesos+Edad+Diabetes+Neumonia, coFrame, family = binomial(link = 'logit'))
+reLin <- glm(formula = Muertos~Obesos+Edad+Diabetes+Neumonia+Hipertension+Asma+EPOC+Inmunosupresion+Tabaquismo+Renal_Cronica, coFrame, family = binomial(link = 'logit'))
 summary(reLin)
 ```
 
@@ -114,13 +121,14 @@ Podemos observar que hay una alta relación entre padecer obesidad y morir si se
 Anteriormente descartamos Diabetes debido debido a que no se encontro una relación significante que pudieran explicar las muertes.
 
 ```{r}
+# Preguntar significado de valor de EDAD
 exp(coefficients(reLin))
 ```
 
 # Clasificación de observaciones
 
 ```{r}
-install.packages("InformationValue")
+#install.packages("InformationValue")
 ```
 
 
@@ -135,7 +143,7 @@ coFrame
 ```
 
 ```{r}
-#punto de corte maximisa la calsificación de las observaciones
+#punto de corte maximiza la clasificación de las observaciones
 #el punto de corte sera en base a muertos con respecto a probabilidad para que sea mas acertado
 Punto_Corte <- optimalCutoff(coFrame$Muertos,coFrame$PREDICT,optimiseFor = "Both")
 Punto_Corte
@@ -155,7 +163,16 @@ confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
 ```
 
 ```{r}
-#un 74% de las observaciones es muy buen resultado
+#un ~78% de las observaciones es muy buen resultado
 Obs_correctas
 ```
+### Preguntas
 
+Borramos a los centenarios???? Quitamos edad????? 
+Significado de 0.9 en coeficientes de regresión lineal
+Graficass a utilizar
+
+
+IDEAS:
+- Aplicar otro modelo
+- Calcular probabilidad del usuario (input condiciones)
