@@ -1,9 +1,12 @@
 ---
 title: "PROYECTO_R"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 ```{r}
-setwd("/Users/carlosmichelmourradiaz/documents/R_Project")
+#setwd("/Users/carlosmichelmourradiaz/documents/R_Project")
+setwd("C:/Users/pauro/OneDrive/Documentos/R/Proyecto_R")
 ```
 Por si quieren actualizar archivos:
 ```{r}
@@ -166,13 +169,13 @@ confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
 #un ~78% de las observaciones es muy buen resultado
 Obs_correctas
 ```
-### Preguntas
+### Pendientes
+Eliminar centenarios y establecer rangos de edad
+Redactar reporte estilo artículo
+Gráficas: de acuerdo a la pregunta (ej. comparar prob entre categorías, combinación de condiciones, etc), comparar con estádisticas de acuerdo a las predicciones y categorías
 
-Borramos a los centenarios???? Quitamos edad????? 
-Significado de 0.9 en coeficientes de regresión lineal
+### Preguntas
 Graficass a utilizar
 
-
 IDEAS:
-- Aplicar otro modelo
-- Calcular probabilidad del usuario (input condiciones)
+- Calcular probabilidad del usuario (input condiciones): shiny paquete para interfaz
