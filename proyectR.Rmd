@@ -26,6 +26,25 @@ rawMxData$FECHA_DEF[rawMxData$FECHA_DEF != '9999-99-99'] <- 0
 # Muertos
 rawMxData$FECHA_DEF[rawMxData$FECHA_DEF == '9999-99-99'] <- 1
 ```
+
+Filtrar por rangos de edad:
+```{r}
+# De 0-17
+rawMxData$EDAD[rawMxData$EDAD >= 0 & rawMxData$EDAD < 18] <- 1
+# De 18-44
+rawMxData$EDAD[rawMxData$EDAD >= 18 & rawMxData$EDAD < 45] <- 2
+# De 45-59
+rawMxData$EDAD[rawMxData$EDAD >= 45 & rawMxData$EDAD < 60] <- 3
+# De 60-99
+rawMxData$EDAD[rawMxData$EDAD >= 60 & rawMxData$EDAD < 100] <- 4
+# Ignorar >99
+rawMxData$EDAD[rawMxData$EDAD >= 100] <- 5
+
+# Ignorar centenarios para todos los datos
+avoidCentenarians <- rawMxData$EDAD != 5
+
+```
+
 0 -> paciente vivo
 1 -> paciente muerto
 # Filtrar datos
@@ -33,11 +52,12 @@ Función por enfermedad:
 
 ```{r}
 # FUNCION QUE REEMPLAZA 2 (FALSE) CON 0 (FALSE)
-coMor <- function(comorbiditiesList){
-  comorbidities <-matrix(1:length(rawMxData$FECHA_ACTUALIZACION), ncol = 1)
-  comorbidities <- cbind(comorbidities,as.numeric(rawMxData$FECHA_DEF), rawMxData$EDAD)
+coMor <- function(comorbiditiesList, avoidCentenarians){
+  comorbidities <-matrix(1:length(rawMxData$FECHA_ACTUALIZACION[avoidCentenarians]), ncol = 1)
+  comorbidities <- cbind(comorbidities,as.numeric(rawMxData$FECHA_DEF[avoidCentenarians]), rawMxData$EDAD[avoidCentenarians])
   colnames(comorbidities) <- c('INDICE', 'DEFUNCION', 'EDAD')
   comorbiditiesAux <- sapply(comorbiditiesList, function(comorbidity){
+    comorbidity <- comorbidity[avoidCentenarians]
     return(replace(rawMxData[[comorbidity]],rawMxData[[comorbidity]] == 2, 0))
     })
   comorbidities <- cbind(comorbidities, comorbiditiesAux)
@@ -57,10 +77,6 @@ coMor <- function(comorbiditiesList){
 #generar la matriz con los datos de las comorbilidades indicadas
 prueba <- coMor(c('OBESIDAD', 'DIABETES', 'NEUMONIA', 'EPOC', 'RENAL_CRONICA', 'ASMA', 'INMUSUPR', 'TABAQUISMO', 'HIPERTENSION'))
 table(prueba[,4:6])
-```
-
-```{r}
-prueba
 ```
 
 
@@ -159,9 +175,9 @@ Obs_correctas <- 1-misClassError(coFrame$Muertos,coFrame$PREDICT,threshold = Pun
 #esta matriz indicara como estan clasificadas las observaciones en los cuadrantes
 confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
 
-# 1-1 -> Pacientes que el modelo predijo que moririan y murieron
-# 1-0 -> Pacientes que el modelo predijo que moririan y no murieron
-# 0-1 -> Pacientes que el modelo predijo que no moririan y murieron
+# 1-1 -> Pacientes que el modelo predijo que no moririan y no murieron
+# 1-0 -> Pacientes que el modelo predijo que no moririan y murieron
+# 0-1 -> Pacientes que el modelo predijo que  moririan y no murieron
 # 0-0 -> Pacientes  que el modelo predijo que no moriria y no murieron
 ```
 
@@ -169,13 +185,67 @@ confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
 #un ~78% de las observaciones es muy buen resultado
 Obs_correctas
 ```
+## Gráficas
+```{r}
+# CODIGO EJEMPLO
+#Obtener las clasificaciones de todos los genes con valor t > 3
+diffCatGenes <- genes[abs(define_tTest(expValues[,,1], expValues[,,2])) > 3,2]
+
+#Calcular porcentajes por clasificacion
+percentage <- round(table(diffCatGenes)/sum(table(diffCatGenes))*100, 2)
+percentage
+#Componer los identificadores con porcentaje
+labs <- paste(c('Activator', 'Ambivalent', 'Represor'), percentage)
+labs <- paste(labs,"%",sep="")
+
+#Generar la grafica de pie
+colorGradient <- colorRampPalette(c('lightskyblue','yellow3'))
+pie(table(diffCatGenes), labels = labs, main='Proportion of statistical values by category', col = colorGradient(3))
+
+```
+
+```{r}
+# Pie porcentajes de comorbilidades
+comobiditiesList <- c('Obesos', 'Diabetes', 'Neumonia', 'Tabaquismo')
+numIndividuals <- length(coFrame$Muertos)
+labs <- c('Muertos', 'Vivos')
+color <- c('red', 'blue')
+
+deadsPerComorbidity <- sapply(comobiditiesList, function(co){
+  deadsPerComorb <- coFrame[[co]][coFrame$Muertos == 1 & coFrame[[co]] == 1]
+  return(length(deadsPerComorb))
+  })
+
+alivePerComorbidity <- sapply(deadsPerComorbidity, function(x){
+  total <- numIndividuals - x
+  return(total)
+})
+par(mfrow = c(2,2))
+pie(c(deadsPerComorbidity[1], alivePerComorbidity[1]), labels = labs, main = 'Mortalidad de Obesos', col = )
+pie(c(deadsPerComorbidity[2], alivePerComorbidity[2]), labels = labs, main = 'Mortalidad de Diabetes', col = color)
+pie(c(deadsPerComorbidity[3], alivePerComorbidity[3]), labels = labs, main = 'Mortalidad de Neumonia', col = color)
+pie(c(deadsPerComorbidity[4], alivePerComorbidity[4]), labels = labs, main = 'Mortalidad de Tabaquismo', col = color)
+
+# Barplots de interceptos
+
+
+# Boxplot de acuerdo a la edad
+
+
+# Pie de falsos positivos
+
+
+# Diagrama de Venn 
+
+
+```
+
+
+
 ### Pendientes
-Eliminar centenarios y establecer rangos de edad
 Redactar reporte estilo artículo
 Gráficas: de acuerdo a la pregunta (ej. comparar prob entre categorías, combinación de condiciones, etc), comparar con estádisticas de acuerdo a las predicciones y categorías
 
-### Preguntas
-Graficass a utilizar
 
 IDEAS:
 - Calcular probabilidad del usuario (input condiciones): shiny paquete para interfaz
