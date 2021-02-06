@@ -258,6 +258,18 @@ boxplot(coFrame$Edad)
 
 # Pie de falsos positivos
 sensitivityData <- list(Muertos = coFrame$PREDICT[coFrame$Muertos== 1], Vivos = coFrame$PREDICT[coFrame$Muertos == 0])
+densMuertos <- density(sensitivityData$Muertos)
+densVivos <- density(sensitivityData$Vivos)
+mi.rojo <- rgb(1, 0, 0, 0.3)
+mi.verde <- rgb(0, 1, 0, 0.3)
+plot(densMuertos, col='red', xlim = c(0.6, 1),ylim=c(0,140), main = 'Sensibilidad y específicidad', xlab = 'Valor predictivo', ylab='Frecuencia')
+lines(densVivos, col='green')
+polygon(densMuertos, col=mi.rojo, border='red')
+polygon(densVivos, col=mi.verde, border='green')
+abline(v = 0.93, col= 'blue')
+text(0.8, 135, 'Predicción\nvivos', cex = 0.9)
+text(0.975, 135, 'Predicción\nmuertos', cex = 0.9)
+legend('topleft',c('Muertos','Vivos','Punto de corte'),fill=c('red','green', 'blue'))
 
 
 # Diagrama de Venn 
