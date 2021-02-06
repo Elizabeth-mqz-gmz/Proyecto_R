@@ -5,6 +5,11 @@ output:
     df_print: paged
 ---
 ```{r}
+library(ggplot2)
+
+```
+
+```{r}
 #setwd("/Users/carlosmichelmourradiaz/documents/R_Project")
 setwd("C:/Users/pauro/OneDrive/Documentos/R/Proyecto_R")
 ```
@@ -141,7 +146,8 @@ Anteriormente descartamos Diabetes debido debido a que no se encontro una relaci
 
 ```{r}
 # Preguntar significado de valor de EDAD
-exp(coefficients(reLin))
+intercepts <- exp(coefficients(reLin))
+intercepts
 ```
 
 # Clasificación de observaciones
@@ -173,8 +179,8 @@ Punto_Corte
 Obs_correctas <- 1-misClassError(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
 
 #esta matriz indicara como estan clasificadas las observaciones en los cuadrantes
-confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
-
+sensitivity <- confusionMatrix(coFrame$Muertos,coFrame$PREDICT,threshold = Punto_Corte)
+sensitivity
 # 1-1 -> Pacientes que el modelo predijo que no moririan y no murieron
 # 1-0 -> Pacientes que el modelo predijo que no moririan y murieron
 # 0-1 -> Pacientes que el modelo predijo que  moririan y no murieron
@@ -220,23 +226,41 @@ alivePerComorbidity <- sapply(deadsPerComorbidity, function(x){
   total <- numIndividuals - x
   return(total)
 })
-par(mfrow = c(2,2))
-pie(c(deadsPerComorbidity[1], alivePerComorbidity[1]), labels = labs, main = 'Mortalidad de Obesos', col = )
-pie(c(deadsPerComorbidity[2], alivePerComorbidity[2]), labels = labs, main = 'Mortalidad de Diabetes', col = color)
-pie(c(deadsPerComorbidity[3], alivePerComorbidity[3]), labels = labs, main = 'Mortalidad de Neumonia', col = color)
-pie(c(deadsPerComorbidity[4], alivePerComorbidity[4]), labels = labs, main = 'Mortalidad de Tabaquismo', col = color)
+
+percentageCalculator <- function(x, aliveOrDeadVector){
+  percentage <- round((aliveOrDeadVector[x]/(deadsPerComorbidity[x]+alivePerComorbidity[x]))*100, 2)
+  return(percentage)
+}
+
+# Calculo de porcentajes para las etiquetas
+deadsPercentages <- percentageCalculator(1:4, deadsPerComorbidity)
+alivePercentages <- percentageCalculator(1:4, alivePerComorbidity)
+
+#Componer los identificadores con porcentaje
+labs <-c( paste('Muertos',deadsPercentages),paste('Vivos',alivePercentages))
+labs <- paste(labs,"%",sep="")
+labs <- sapply(1:4, function(x){
+  labsMatrix <- labs[seq(x,length(labs),4)]
+  return(labsMatrix)
+  })
+
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE))
+pie(c(deadsPerComorbidity[1], alivePerComorbidity[1]), labels =labs[,1], main = 'Mortalidad de Obesos', col = color, radius =1)
+pie(c(deadsPerComorbidity[2], alivePerComorbidity[2]), labels = labs[,2], main = 'Mortalidad de Diabetes', col = color, radius = 1)
+pie(c(deadsPerComorbidity[3], alivePerComorbidity[3]), labels = labs[,3], main = 'Mortalidad de Neumonia', col = color, radius = 1)
+pie(c(deadsPerComorbidity[4], alivePerComorbidity[4]), labels = labs[,4], main = 'Mortalidad de Tabaquismo', col = color, radius = 1)
 
 # Barplots de interceptos
-
+barplot(intercepts[2:5], ylim = c(0,2)); abline(h=1, lty=2, col="red")
 
 # Boxplot de acuerdo a la edad
-
+boxplot(coFrame$Edad)
 
 # Pie de falsos positivos
+sensitivityData <- list(Muertos = coFrame$PREDICT[coFrame$Muertos== 1], Vivos = coFrame$PREDICT[coFrame$Muertos == 0])
 
 
 # Diagrama de Venn 
-
 
 ```
 
