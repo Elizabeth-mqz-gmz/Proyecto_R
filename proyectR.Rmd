@@ -77,7 +77,75 @@ coMor <- function(comorbiditiesList, avoidCentenarians){
   return(comorbidities[allDates,])
 }
 ```
+# MAPAS
 
+# Instalacion paquetes en MacOs
+```{r}
+if (!require("devtools")) {
+    install.packages("devtools")
+}
+# devtools::install_github("diegovalle/mxmaps")
+```
+```{bash}
+brew install pkg-config
+brew install gdal
+```
+```{r}
+install.packages("sf")
+install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
+library("mxmaps")
+data("df_mxmunicipio")
+```
+# Parseo de datos
+```{r}
+df_mxmunicipio_2020$value <- NA
+df_mxmunicipio_2020$cases <- NA
+df_mxmunicipio_2020$cases_live <- NA
+df_mxmunicipio_2020$cases_dead <- NA
+df_mxmunicipio_2020$state_code<-as.numeric(df_mxmunicipio_2020$state_code)
+df_mxmunicipio_2020$municipio_code <-as.numeric(df_mxmunicipio_2020$municipio_code)
+
+estados <- sort(unique(rawMxData$ENTIDAD_RES))
+for(entidad in estados){
+  municipios <- sort(unique(rawMxData$MUNICIPIO_RES[rawMxData$ENTIDAD_RES == entidad]))
+  for(municipio in municipios){
+           if(municipio < 999){
+           cases <- rawMxData$FECHA_DEF[rawMxData$ENTIDAD_RES == entidad & rawMxData$MUNICIPIO_RES == municipio]
+           df_mxmunicipio_2020$cases[df_mxmunicipio_2020$state_code == entidad & df_mxmunicipio_2020$municipio_code == municipio] <- length(cases)
+           df_mxmunicipio_2020$cases_live[df_mxmunicipio_2020$state_code == entidad & df_mxmunicipio_2020$municipio_code == municipio] <- length(cases[cases == 1])
+           df_mxmunicipio_2020$cases_dead[df_mxmunicipio_2020$state_code == entidad & df_mxmunicipio_2020$municipio_code == municipio] <- length(cases[cases == 0])
+           percentage <- (length(cases)/df_mxmunicipio_2020$pop[df_mxmunicipio_2020$state_code == entidad & df_mxmunicipio_2020$municipio_code == municipio])*100
+           df_mxmunicipio_2020$value[df_mxmunicipio_2020$state_code == entidad & df_mxmunicipio_2020$municipio_code == municipio] <- percentage }}
+           
+df_mxmunicipio_2020$value[is.na(df_mxmunicipio_2020$value)] <- 0
+```
+
+# Mapas
+```{r}
+mxmunicipio_choropleth(df_mxmunicipio_2020, 
+                       num_colors = 5,
+                       title = "Porcentaje de población infectada con COVID-19",
+                       legend = "%")
+```
+```{r}
+mxmunicipio_choropleth(df_mxmunicipio_2020, num_colors = 1,
+                       zoom = subset(df_mxmunicipio_2020, metro_area %in% 
+                                       "Valle de México")$region,
+                       title = "Porcentaje de poblacion por municipio en Valle de México",
+                       show_states = FALSE,
+                       legend = "%")
+```
+```{r}
+mxmunicipio_choropleth(df_mxmunicipio_2020, num_colors = 1,
+                       zoom = subset(df_mxmunicipio_2020, state_name %in% 
+                                       c("Jalisco", "Morelos", "Hidalgo"))$region,
+                       title = "Porcentaje de poblacion infectada por municipio en Jalisco, Hidalgo y Morelos",
+                       show_states = FALSE,
+                       legend = "%")
+```
+
+# COMORBILIDADES
 ```{r}
 #generar la matriz con los datos de las comorbilidades indicadas
 prueba <- coMor(c('OBESIDAD', 'DIABETES', 'NEUMONIA', 'EPOC', 'RENAL_CRONICA', 'ASMA', 'INMUSUPR', 'TABAQUISMO', 'HIPERTENSION'))
