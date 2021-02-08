@@ -325,7 +325,7 @@ barplot(intercepts[2:5], ylim = c(0,2)); abline(h=1, lty=2, col="red")
 boxplot(coFrame$Edad)
 
 # Pie de falsos positivos
-sensitivityData <- list(Muertos = coFrame$PREDICT[coFrame$Muertos== 1], Vivos = coFrame$PREDICT[coFrame$Muertos == 0])
+sensitivityData <- list(Vivos = coFrame$PREDICT[coFrame$Muertos== 1], Muertos = coFrame$PREDICT[coFrame$Muertos == 0])
 densMuertos <- density(sensitivityData$Muertos)
 densVivos <- density(sensitivityData$Vivos)
 mi.rojo <- rgb(1, 0, 0, 0.3)
@@ -335,8 +335,8 @@ lines(densVivos, col='green')
 polygon(densMuertos, col=mi.rojo, border='red')
 polygon(densVivos, col=mi.verde, border='green')
 abline(v = 0.93, col= 'blue')
-text(0.8, 135, 'Predicción\nvivos', cex = 0.9)
-text(0.975, 135, 'Predicción\nmuertos', cex = 0.9)
+text(0.8, 135, 'Predicción\nmuertos', cex = 0.9)
+text(0.975, 135, 'Predicción\nvivos', cex = 0.9)
 legend('topleft',c('Muertos','Vivos','Punto de corte'),fill=c('red','green', 'blue'))
 
 
