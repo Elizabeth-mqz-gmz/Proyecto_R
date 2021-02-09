@@ -4271,5 +4271,17 @@ input, select, textarea {
 			}
 
 	}
+	
+.estados{margin: 1em 0 0.5em 0;}
 
-	.estados{margin: 1em 0 0.5em 0;}
+.cols{
+	-moz-columns: 20em 2;
+	-webkit-columns: 20em 2;
+	-ms-columns: 20em 2;
+	columns: 20em 2;
+	-moz-column-gap: 2em;
+	-webkit-column-gap: 2em;
+	-ms-column-gap: 2em;
+	column-gap: 2em;
+	text-align: justify;
+}
