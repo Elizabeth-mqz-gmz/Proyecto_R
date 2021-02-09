@@ -116,21 +116,21 @@
 								<section>
 									<span class="icon solid major fa-subscript"></span>
 									<h4>Regresiones lineales</h4>
-									<p>Una regresión lineal es un modelo matemático usado para aproximar la relación de dependencia entre una variable <i>X</i>
-										y otra variable <i>Y</i> en un conjunto de datos, por medio de una expresión que posea la forma de una línea recta denotada
+									<p>Una regresión lineal es un <b>modelo matemático</b> usado para aproximar la <b>relación de dependencia</b> entre una variable <i>X</i>
+										y otra variable <i>Y</i> en un conjunto de datos, por medio de una <b>expresión</b> que posea la forma de una línea recta denotada
 										por la función : <i><b>Y = 𝞫1X + 𝞫0</b></i></p>
 									<a href="#" class="image"><img src="images/reg_lin.jpeg" alt="" data-position="top center" /></a>
 								</section>
 								<section>
 									<span class="icon solid major fa-brain"></span>
 									<h4>Regresiones logística (GLM)</h4>
-									<p>Para realizar los análisis estadísticos sobre la relación existente entre cada una de las comorbilidades se hará uso de
-										lo que se conocen como modelos lineales generalizados los cuales son utilizados para los problemas de clasificación binaria.
-										Estos modelos buscan explicar los resultados obtenidos en una variable binomial a partir de su relación con valores escalares
-										observados en otras variables independientes por medio de un modelo logit (regresión logística).</p>
+									<p>Para realizar los <b>análisis estadísticos</b> sobre la relación existente entre cada una de las <b>comorbilidades</b> se hará uso de
+										lo que se conocen como <b>modelos lineales generalizados</b> los cuales son utilizados para los problemas de <b>clasificación binaria</b>.
+										Estos modelos buscan explicar los resultados obtenidos en una variable <b>binomial</b> a partir de su relación con valores escalares
+										observados en otras variables independientes por medio de un <b>modelo logit</b> (regresión logística).</p>
 									<a href="#" class="image" class="main"><img src="images/reg_log1.jpeg" alt="" data-position="top center" /></a>
-									<p>La regresión logística toma el valor devuelto por una regresión lineal obtenida mediante el método de mínimos cuadrados y lo
-										transforma en una expresión cuyo resultado siempre esté comprendido entre los valores 0 y 1, lo cual se logra por medio de la función:</p>
+									<p>La <b>regresión logística</b> toma el valor devuelto por una regresión lineal obtenida mediante el método de <b>mínimos cuadrados</b> y lo
+										transforma en una expresión cuyo resultado siempre esté comprendido entre los <b>valores 0 y 1</b>, lo cual se logra por medio de la función:</p>
 									<a href="#" class="image"><img src="images/reg_log2.jpeg" alt="" data-position="top center" /></a>
 									<ul>
 										<li><b><i>fitted.values</i></b>: Es una función que extrae los valores ajustados de objetos devueltos por funciones de modelado.</li>
@@ -139,9 +139,9 @@
 								<section>
 									<span class="icon solid major fa-space-shuttle"></span>
 									<h4>optimalCutoff</h4>
-									<p>Es una función encargada de devolver el mejor score de probabilidad que sirva como punto de corte para clasificar dos grupos de acuerdo
-										a la categoría a la que deben pertenecer. Esto se logra por medio de análisis estadísticos de pruebas de hipótesis que permiten establecer
-										una región de aceptación y rechazo. </p>
+									<p>Es una función encargada de devolver el mejor <b>score de probabilidad</b> que sirva como punto de corte para <b>clasificar</b> dos grupos de acuerdo
+										a la categoría a la que deben pertenecer. Esto se logra por medio de análisis estadísticos de <b>pruebas de hipótesis</b> que permiten establecer
+										una región de <i><b>aceptación y rechazo</i></b>. </p>
 									<a href="#" class="image"><img src="images/cutoff.jpeg" alt="" data-position="top center" /></a>
 								</section>
 							</div>
@@ -156,7 +156,7 @@
 								<div class="content">
 									<div class="inner">
 										<h2>Resultados obtenidos</h2>
-										<p>Probamos por diversos análisis que la efectividad de predicción del modelo creado.</p>
+										<p>Probamos por diversos análisis que la <b>efectividad</b> de predicción del modelo creado.</p>
 										<ul class="actions">
 											<li><a href="results.html" class="button">Ver resultados</a></li>
 										</ul>
@@ -168,10 +168,10 @@
 								<div class="content">
 									<div class="inner">
 										<h2>Situación en México</h2>
-										<p>Hemos realizado análisis en todos los estados del país y obtuvimos dos vertientes importantes:</p>
+										<p>Hemos realizado análisis en todos los <b>estados del país</b> y obtuvimos dos vertientes importantes:</p>
 										<ul>
-											<li>Estados con mayor incidencia de casos COVID-19</li>
-											<li>Estados con mayor índice de mortalidad</li>
+											<li>Estados con mayor <b>incidencia</b> de casos <i><b>COVID-19</i></b></li>
+											<li>Estados con mayor índice de <b>mortalidad</b> por <i><b>COVID-19</i></b></li>
 										</ul>
 										<ul class="actions">
 											<li><a href="mex_cases.html" class="button">Casos COVID-19</a></li>
@@ -187,26 +187,11 @@
 					<section id="three" class="wrapper style1 fade-up">
 						<div class="inner">
 							<h2>Conclusiones</h2>
-							<p class="cols">A partir de los métodos y los resultados obtenidos, buscamos establecer correlaciones entre la presencia de comorbilidades
-								en pacientes de COVID-19 y valores predictivos para la supervivencia de cada paciente de acuerdo a la presencia de dichas comorbilidades.
-								<br/> <br/>
-							La regresión logística nos permitió establecer las relaciones de múltiples condiciones, el resultado principal obtenido fue el intercepto
-							el cual nos permitió interpretar las correlaciones (positivas, neutrales o negativas) entre la comorbilidad y supervivencia. Dichas correlaciones
-							las vimos en datos reales representados por gráficas pastel para indicar el porcentaje de vivos y muertos en algunas condiciones. Finalmente a
-							partir de la combinación de condiciones por paciente el modelo establece valores de predicción de supervivencia, dichos valores fueron evaluados
-							para conocer su sensibilidad y especificidad.  <br/> <br/>
-							Los resultados obtenidos fueron concordantes con las características de COVID-19, siendo los pacientes con diabetes, enfermedad renal crónica y
-							neumonía los que se predice tengan un menor tasa de supervivencia. Esto coincide con la capacidad de SARS-CoV-2 de atacar principalmente pulmones,
-							corazón y riñones. Lo mismo sucede con la edad,donde el modelo coincide con la tendencia de que mientras mayor sea la edad, menor es la probabilidad
-							de sobrevivir.  <br/> <br/>
-							En el análisis territorial de la infecciosidad y mortalidad, denotamos las diferencias entre el los top 5 de ambas categorías, donde descubrimos que
-							a pesar de lo esperado, estos eran completamente distintos. La razón de esto puede deberse a muchos factores, sin embargo, nuestro modelo podría
-							analizar las tendencias de perfiles en cada estado para predecir si la población tiene mayor probabilidad de morir únicamente por las características
-							de sus individuos, o en su defecto que se deba a otras razones distintas al perfil poblacional.  <br/> <br/>
-							La principal línea de investigación en la que nuestro proyecto puede impactar es en la predicción directa de tasa de supervivencia/mortalidad para
-							cualquier persona, personalizando la predicción de acuerdo a las condiciones que presente el sujeto (edad, obesidad, tabaquismo, etc.), dichas
-							predicciones podrán ser utilizadas para el desarrollo de estrategias de en el sector de Salud Pública, por ejemplo, en criterios de prioridad para
-							el plan de vacunación.</p>
+							<p class="cols">A partir de los métodos y los resultados obtenidos, buscamos establecer <b>correlaciones</b> entre la presencia de <b>comorbilidades</b> en pacientes de <i><b>COVID-19</i></b> y <b>valores predictivos</b> para la supervivencia de cada paciente de acuerdo a la presencia de dichas comorbilidades. <br/> <br/>
+							La <b>regresión logística</b> nos permitió establecer las relaciones de múltiples condiciones, el resultado principal obtenido fue el <b>intercepto</b> el cual nos permitió interpretar las <b>correlaciones (positivas, neutrales o negativas)</b> entre la comorbilidad y supervivencia. Dichas correlaciones las vimos en datos reales representados por gráficas pastel para indicar el <b>porcentaje de vivos y muertos</b> en algunas condiciones. Finalmente a partir de la combinación de condiciones por paciente el modelo establece <b>valores de predicción de supervivencia</b>, dichos valores fueron evaluados para conocer su <i><b>sensibilidad y especificidad</i></b>.  <br/> <br/>
+							Los resultados obtenidos fueron concordantes con las características de <i><b>COVID-19</i></b>, siendo los pacientes con <b>diabetes, enfermedad renal crónica y neumonía</b> los que se predice tengan un menor tasa de supervivencia. Esto coincide con la capacidad de <i><b>SARS-CoV-2</i></b> de atacar principalmente <b>pulmones, corazón y riñones</b>. Lo mismo sucede con la <b>edad</b>,donde el modelo coincide con la tendencia de que mientras <b>mayor sea la edad</b>, menor es la probabilidad de sobrevivir.  <br/> <br/>
+							En el análisis territorial de la <i><b>infecciosidad y mortalidad</i></b>, denotamos las diferencias entre el los <b>top 5</b> de ambas categorías, donde descubrimos que a pesar de lo esperado, estos eran completamente distintos. La razón de esto puede deberse a muchos <b>factores</b>, sin embargo, nuestro modelo podría analizar las <b>tendencias</b> de perfiles en cada estado para predecir si la población tiene mayor probabilidad de morir únicamente por las características de sus individuos, o en su defecto que se deba a otras razones <b>distintas</b> al perfil poblacional.  <br/> <br/>
+							La principal línea de investigación en la que nuestro proyecto puede impactar es en la <b>predicción directa</b> de tasa de supervivencia/mortalidad para cualquier persona, personalizando la predicción de acuerdo a las condiciones que presente el sujeto (edad, obesidad, tabaquismo, etc.), dichas predicciones podrán ser utilizadas para el <b>desarrollo de estrategias</b> de en el sector de <b>Salud Pública</b>, por ejemplo, en criterios de prioridad para el plan de vacunación.</p>
 						</div>
 					</section>
 
