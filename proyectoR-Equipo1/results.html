@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Resultados</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<a href="index.html" class="title">Predicción de supervivencia al COVID-19 de acuerdo a comorbilidades en México</a>
+				<nav>
+					<ul>
+						<li><a href="index.html">Inicio</a></li>
+						<li><a href="results.html" class="active">Resultados</a></li>
+						<li><a href="mex_cases.html">Casos México</a></li>
+						<li><a href="mex_deads.html">Muertes México</a></li>
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<section id="main" class="wrapper">
+						<div class="inner">
+							<h1 class="major">Valoración de la efectividad</h1>
+							<p>A continuación se mostrarán las diferentes gráficas que representan los análisis aplicados para validad
+								la efectividad de predicción del modelo.</p>
+						</div>
+					</section>
+
+				<!-- Content -->
+					<section class="wrapper">
+						<div class="inner">
+							<h2>Correlación de supervivencia</h2>
+							<p><span class="image left"><img src="images/corrMort.jpeg" alt="" /></span>En estas gráficas podemos observar
+								algunos de los valores del intercepto generados a partir de la regresión logística.</p>
+							<p>El valor del intercepto se interpreta de la siguiente manera:
+								<ul>
+									<li>Si el valor es mayor a 1 asumimos que existe una correlación positiva entre la tasa de sobrevivencia a COVID-19
+										y la condición presentada. Esto lo podemos observar en el caso de asma cuyo valor es de 1.316 lo cual representaría
+										que personas con esta afección poseen un 30% más de probabilidad de sobrevivir en caso de contraer COVID-19.</li>
+									<li>Si el valor es 1, o muy cercano a él como en el caso de tabaquismo con un valor de  1.079; lo que indica que el
+										sujeto con la condición tiene la misma probabilidad de sobrevivir que de morir en caso de contraer COVID-19.</li>
+									<li>Si el valor es menor a 1 asumimos que existe una correlación negativa entre la tasa de sobrevivencia a COVID-19
+										y la condición presentada. La mayoría de los casos en el modelo presentan correlación negativa, el más grave de
+										estos es neumonía con un valor de 0.061; lo que sugiere que personas con dicha afección tienen un 94% más de
+										probabilidad de morir en caso de contraer COVID-19. </li>
+								</ul>
+							</p>
+						</div>
+					</section>
+					<section class="wrapper">
+						<div class="inner">
+							<h2>Proporción de mortalidad por comorbilidad</h2>
+							<span class="image fit"><img src="images/pies.png" alt=""/></span>
+							<p>A partir de las comorbilidades mencionadas anteriormente,
+								las siguientes gráficas de pastel muestran la proporción de individuos muertos contra los individuos que sobrevivieron ante el
+								COVID-19 de acuerdo a la comorbilidad. Podemos observar que las condiciones con mayor correlación negativa (neumonía, enfermedad
+								renal crónica, etc.) el porcentaje de muertos es mayor que en aquellas con correlación positiva o cercana a 1 (asma, tabaquismo,
+								hipertensión, etc.).</p>
+						</div>
+					</section>
+					<section class="wrapper">
+						<div class="inner">
+							<h2>Análisis de relación sensibilidad-especificidad</h2>
+							<p><span class="image left"><img src="images/sensibilidad.jpeg" alt="" /></span>Esta gráfica muestra la relación
+								entre sensibilidad y especificidad del modelo para predecir a los individuos que viven o mueren en caso de
+								contraer COVID-19 y que presentaban alguna comorbilidad. Por medio del modelo de regresión logística generado
+								se le asignó un valor predictivo a cada paciente dependiendo de las comorbilidades que presentaba. </p>
+							<p>Debido a que el modelo busca principalmente predecir los pacientes que sobrevivirán al contraer la enfermedad,
+								se realizó el cálculo del punto de corte que indica el umbral para clasificar de manera más acertada entre vivos
+								y muertos.</p>
+						</div>
+					</section>
+					<section class="wrapper">
+						<div class="inner" style="margin-bottom: 10em;">
+							<h2>Proporción de relación sensibilidad-especificidad</h2>
+							<p><span class="image right"><img src="images/sens_pie.jpeg" alt="" /></span>El pie que se muestra a continuación,
+								indica los porcentajes de la relación Sensibilidad-Especificidad que el modelo es capaz de predecir a partir de
+								los datos recabados de la SEGOB. De este modo podemos confirmar que nuestro modelo predijo correctamente en un 83%
+								de las ocasiones, lo cual indica un alto grado de efectividad.</p>
+						</div>
+					</section>
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer" class="wrapper alt">
+				<div class="inner">
+					<ul class="menu">
+						<li>&copy; Equipo-1. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
