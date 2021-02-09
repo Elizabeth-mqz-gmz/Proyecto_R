@@ -4096,7 +4096,7 @@ input, select, textarea {
 
 			body:not(.is-touch) .tiles article:hover .content {
 				max-height: 15em;
-				opacity: 1;
+				opacity: 0;
 			}
 
 		* + .tiles {
@@ -4271,3 +4271,5 @@ input, select, textarea {
 			}
 
 	}
+
+	.estados{margin: 1em 0 0.5em 0;}
