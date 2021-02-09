@@ -44,18 +44,18 @@
 						<div class="inner">
 							<h2>Correlación de supervivencia</h2>
 							<p><span class="image left"><img src="images/corrMort.jpeg" alt="" /></span>En estas gráficas podemos observar
-								algunos de los valores del intercepto generados a partir de la regresión logística.</p>
+								algunos de los <i><b>valores del intercepto</i></b> generados a partir de la regresión logística.</p>
 							<p>El valor del intercepto se interpreta de la siguiente manera:
 								<ul>
-									<li>Si el valor es mayor a 1 asumimos que existe una correlación positiva entre la tasa de sobrevivencia a COVID-19
-										y la condición presentada. Esto lo podemos observar en el caso de asma cuyo valor es de 1.316 lo cual representaría
-										que personas con esta afección poseen un 30% más de probabilidad de sobrevivir en caso de contraer COVID-19.</li>
-									<li>Si el valor es 1, o muy cercano a él como en el caso de tabaquismo con un valor de  1.079; lo que indica que el
-										sujeto con la condición tiene la misma probabilidad de sobrevivir que de morir en caso de contraer COVID-19.</li>
-									<li>Si el valor es menor a 1 asumimos que existe una correlación negativa entre la tasa de sobrevivencia a COVID-19
-										y la condición presentada. La mayoría de los casos en el modelo presentan correlación negativa, el más grave de
-										estos es neumonía con un valor de 0.061; lo que sugiere que personas con dicha afección tienen un 94% más de
-										probabilidad de morir en caso de contraer COVID-19. </li>
+									<li>Si el valor es <b>mayor a 1</b> asumimos que existe una <i><b>correlación positiva</i></b> entre la tasa de sobrevivencia a COVID-19
+										y la condición presentada. Esto lo podemos observar en el <i>caso de asma</i> cuyo valor es de 1.316 lo cual representaría
+										que personas con esta afección poseen un <i>30% más de probabilidad de sobrevivir</i> en caso de contraer COVID-19.</li> <br/>
+									<li>Si el valor es <b>1, o muy cercano</b> a él como en el <i>caso de tabaquismo</i> con un valor de  1.079; lo que indica que el
+										sujeto con la condición tiene la <i>misma probabilidad de sobrevivir que de morir</i> en caso de contraer COVID-19.</li> <br/>
+									<li>Si el valor es <b>menor a 1</b> asumimos que existe una <i><b>correlación negativa</i></b> entre la tasa de sobrevivencia a COVID-19
+										y la condición presentada. La <i>mayoría de los casos</i> en el modelo presentan correlación negativa, el más grave de
+										estos es <i>neumonía</i> con un valor de 0.061; lo que sugiere que personas con dicha afección tienen un <i>94% más de
+										probabilidad de morir</i> en caso de contraer COVID-19. </li>
 								</ul>
 							</p>
 						</div>
@@ -65,21 +65,21 @@
 							<h2>Proporción de mortalidad por comorbilidad</h2>
 							<span class="image fit"><img src="images/pies.png" alt=""/></span>
 							<p>A partir de las comorbilidades mencionadas anteriormente,
-								las siguientes gráficas de pastel muestran la proporción de individuos muertos contra los individuos que sobrevivieron ante el
-								COVID-19 de acuerdo a la comorbilidad. Podemos observar que las condiciones con mayor correlación negativa (neumonía, enfermedad
-								renal crónica, etc.) el porcentaje de muertos es mayor que en aquellas con correlación positiva o cercana a 1 (asma, tabaquismo,
+								las siguientes gráficas de pastel muestran la <i><b>proporción de individuos muertos contra los individuos que sobrevivieron ante el
+								COVID-19</i></b> de acuerdo a la <b>comorbilidad</b>. Podemos observar que las condiciones con mayor <i>correlación negativa</i> (neumonía, enfermedad
+								renal crónica, etc.) el <i>porcentaje de muertos es mayor</i> que en aquellas con <i>correlación positiva o cercana a 1</i> (asma, tabaquismo,
 								hipertensión, etc.).</p>
 						</div>
 					</section>
 					<section class="wrapper">
 						<div class="inner">
 							<h2>Análisis de relación sensibilidad-especificidad</h2>
-							<p><span class="image left"><img src="images/sensibilidad.jpeg" alt="" /></span>Esta gráfica muestra la relación
-								entre sensibilidad y especificidad del modelo para predecir a los individuos que viven o mueren en caso de
-								contraer COVID-19 y que presentaban alguna comorbilidad. Por medio del modelo de regresión logística generado
+							<p><span class="image left"><img src="images/sensibilidad.jpeg" alt="" /></span>Esta gráfica muestra la <i><b>relación
+								entre sensibilidad y especificidad</i></b> del modelo para <b>predecir a los individuos que viven o mueren</b> en caso de
+								contraer COVID-19 y que presentaban alguna comorbilidad. Por medio del modelo de <i>regresión logística</i> generado
 								se le asignó un valor predictivo a cada paciente dependiendo de las comorbilidades que presentaba. </p>
 							<p>Debido a que el modelo busca principalmente predecir los pacientes que sobrevivirán al contraer la enfermedad,
-								se realizó el cálculo del punto de corte que indica el umbral para clasificar de manera más acertada entre vivos
+								se realizó el cálculo del <b>punto de corte</b> que indica el umbral para clasificar de manera más acertada entre vivos
 								y muertos.</p>
 						</div>
 					</section>
